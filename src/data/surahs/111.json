@@ -1,0 +1,61 @@
+{
+    "number": 111,
+    "name": "al-Masad",
+    "verses": [
+        {
+            "text": "تَبَّتْ يَدَآ أَبِى لَهَبٍ وَتَبَّ",
+            "numberInSurah": 1,
+            "juz": 30,
+            "page": 603,
+            "sajda": false,
+            "audio": "https://cdn.islamic.network/quran/audio/64/ar.saoodshuraym/6217.mp3",
+            "translation": "[1875] May the hands of Abu Lahab be ruined, and ruined is he. [1876]",
+            "footnotes": [
+                {"id": 1875, "note": "Al-Masad: Fiber. This surah is also known as al-Lahab (Flame)."},
+                {"id": 1876, "note": "Abu Lahab (the Prophet's uncle), who was an enemy of Islam."}
+            ]
+        },
+        {
+            "text": "مَآ أَغْنَىٰ عَنْهُ مَالُهُۥ وَمَا كَسَبَ",
+            "numberInSurah": 2,
+            "juz": 30,
+            "page": 603,
+            "sajda": false,
+            "audio": "https://cdn.islamic.network/quran/audio/64/ar.saoodshuraym/6218.mp3",
+            "translation": "His wealth will not avail him or that which he gained.",
+            "footnotes": []
+        },
+        {
+            "text": "سَيَصْلَىٰ نَارًا ذَاتَ لَهَبٍ",
+            "numberInSurah": 3,
+            "juz": 30,
+            "page": 603,
+            "sajda": false,
+            "audio": "https://cdn.islamic.network/quran/audio/64/ar.saoodshuraym/6219.mp3",
+            "translation": "He will [enter to] burn in a Fire of [blazing] flame",
+            "footnotes": []
+        },
+        {
+            "text": "وٱمْرَأَتُهُۥ حَمَّالَةَ ٱلْحَطَبِ",
+            "numberInSurah": 4,
+            "juz": 30,
+            "page": 603,
+            "sajda": false,
+            "audio": "https://cdn.islamic.network/quran/audio/64/ar.saoodshuraym/6220.mp3",
+            "translation": "And his wife [as well] – the carrier of firewood. [1877]",
+            "footnotes": [
+                {"id":1877, "note":"She used to put thorns in the Prophet's path and slander him (s.a.v). The word 'firewood' was used by the Arabs to allude to slander and backbiting."}
+            ]
+        },
+        {
+            "text": "فِى جِيدِهَا حَبْلٌۭ مِّن مَّسَدٍۭ",
+            "numberInSurah": 5,
+            "juz": 30,
+            "page": 603,
+            "sajda": false,
+            "audio": "https://cdn.islamic.network/quran/audio/64/ar.saoodshuraym/6221.mp3",
+            "translation": "Around her neck is a rope of [twisted] fiber.",
+            "footnotes": []
+        }
+    ]
+}

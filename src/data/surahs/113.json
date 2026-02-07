@@ -1,0 +1,60 @@
+{
+    "number": 113,
+    "name": "al-Falaq",
+    "verses": [
+        {
+            "text": "قُل| أَعُوذُ بِرَبِّ ٱلْفَلَقِ",
+            "numberInSurah": 1,
+            "juz": 30,
+            "page": 604,
+            "sajda": false,
+            "audio": "https://cdn.islamic.network/quran/audio/64/ar.saoodshuraym/6226.mp3",
+            "translation": "[1881] Say, I seek refuge in the Lord of daybreak",
+            "footnotes": [
+                {"id":1881, "note":"Al-Falaq: Daybreak. This and the following surah were revealed together and are recited when seeking Allah's protection from all kinds of evil."}
+            ]
+        },
+        {
+            "text": "مِن شَرِّ مَا خَلَقَ",
+            "numberInSurah": 2,
+            "juz": 30,
+            "page": 604,
+            "sajda": false,
+            "audio": "https://cdn.islamic.network/quran/audio/64/ar.saoodshuraym/6227.mp3",
+            "translation": "From the evil of that which He created",
+            "footnotes": []
+        },
+        {
+            "text": "وَمِن شَرِّ غَاسِقٍ إِذَا وَقَبَ",
+            "numberInSurah": 3,
+            "juz": 30,
+            "page": 604,
+            "sajda": false,
+            "audio": "https://cdn.islamic.network/quran/audio/64/ar.saoodshuraym/6228.mp3",
+            "translation": "And from the evil of darkness when it settles",
+            "footnotes": []
+        },
+        {
+            "text": "وَمِن شَرِّ ٱلنَّفَّٰثَٰتِ فِى ٱلْعُقَدِ",
+            "numberInSurah": 4,
+            "juz": 30,
+            "page": 604,
+            "sajda": false,
+            "audio": "https://cdn.islamic.network/quran/audio/64/ar.saoodshuraym/6229.mp3",
+            "translation": "And from the evil of the blowers in knots [1882]",
+            "footnotes": [
+                {"id": 1882, "note": "i.e., those who practice magic."}
+            ]
+        },
+        {
+            "text": "وَمِن شَرِّ حَاسِدٍ إِذَا حَسَدَ",
+            "numberInSurah": 5,
+            "juz": 30,
+            "page": 604,
+            "sajda": false,
+            "audio": "https://cdn.islamic.network/quran/audio/64/ar.saoodshuraym/6230.mp3",
+            "translation": "And from the evil of an envier when he envies.",
+            "footnotes": []
+        }
+    ]
+}

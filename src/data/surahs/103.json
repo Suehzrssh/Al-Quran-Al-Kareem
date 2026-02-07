@@ -1,0 +1,36 @@
+{
+    "number": 103,
+    "name": "al-Asr",
+    "verses": [
+        {
+            "text": "وَٱلْعَصْرِ",
+            "numberInSurah": 1,
+            "juz": 30,
+            "page": 601,
+            "sajda": false,
+            "audio": "https://cdn.islamic.network/quran/audio/64/ar.saoodshuraym/6177.mp3",
+            "translation": "",
+            "footnotes": []
+        },
+        {
+            "text": "إِنَّ ٱلْإِنسَٰنَ لَفِى خُسْرٍ",
+            "numberInSurah": 2,
+            "juz": 30,
+            "page": 601,
+            "sajda": false,
+            "audio": "https://cdn.islamic.network/quran/audio/64/ar.saoodshuraym/6178.mp3",
+            "translation": "",
+            "footnotes": []
+        },
+        {
+            "text": "إِلَّا ٱلَّذِينَ ءَامَنُوا۟ وَعَمِلُوا۟ ٱلصَّٰلِحَٰتِ وَتَوَاصَوْا۟ بِٱلْحَقِّ وَتَوَاصَوْا۟ بِٱلصَّبْرِ",
+            "numberInSurah": 3,
+            "juz": 30,
+            "page": 601,
+            "sajda": false,
+            "audio": "https://cdn.islamic.network/quran/audio/64/ar.saoodshuraym/6179.mp3",
+            "translation": "",
+            "footnotes": []
+        }
+    ]
+}

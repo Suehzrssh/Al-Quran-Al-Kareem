@@ -1,0 +1,62 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Zarif Bilgisayar Hattı Fontu */
+
+:root {
+  --bg: #0f172a;
+  --card: #1e293b;
+  --text: #f8fafc;
+  --text-muted: #94a3b8;
+  --primary: #10b981;
+  --accent: #fbbf24;
+}
+
+body {
+  margin: 0;
+  background-color: var(--bg);
+  color: var(--text);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+  font-family: 'Inter', sans-serif;
+}
+
+.arabic-font {
+  font-family: "Lateef", serif;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 1.8rem;
+}
+
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: #334155; border-radius: 10px; }
+::-webkit-scrollbar-thumb:hover { background: var(--primary); }
+
+button { cursor: pointer; transition: 0.2s; }
+
+/* Footnote Superscript Style */
+.footnote-marker {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--primary);
+  cursor: pointer;
+  margin: 0 2px;
+  position: relative;
+  top: -0.4em;
+  vertical-align: baseline;
+  user-select: none;
+  transition: color 0.2s;
+}
+
+.footnote-marker:hover {
+  color: var(--accent);
+}

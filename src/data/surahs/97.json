@@ -1,0 +1,56 @@
+{
+  "number": 97,
+  "name": "al-Qadr",
+  "verses": [
+    {
+      "text": "إِنَّآ أَنزَلْنَٰهُ فِى لَيْلَةِ ٱلْقَدْرِ",
+      "numberInSurah": 1,
+      "juz": 30,
+      "page": 598,
+      "sajda": false,
+      "audio": "https://cdn.islamic.network/quran/audio/64/ar.saoodshuraym/6126.mp3",
+      "translation": "",
+      "footnotes": []
+    },
+    {
+      "text": "وَمَآ أَدْرَىٰكَ مَا لَيْلَةُ ٱلْقَدْرِ",
+      "numberInSurah": 2,
+      "juz": 30,
+      "page": 598,
+      "sajda": false,
+      "audio": "https://cdn.islamic.network/quran/audio/64/ar.saoodshuraym/6127.mp3",
+      "translation": "",
+      "footnotes": []
+    },
+    {
+      "text": "لَيْلَةُ ٱلْقَدْرِ خَيْرٌ مِّنْ أَلْفِ شَهْرٍ",
+      "numberInSurah": 3,
+      "juz": 30,
+      "page": 598,
+      "sajda": false,
+      "audio": "https://cdn.islamic.network/quran/audio/64/ar.saoodshuraym/6128.mp3",
+      "translation": "",
+      "footnotes": []
+    },
+    {
+      "text": "تَنَزَّلُ ٱلْمَلَٰٓئِكَةُ وَٱلرُّوحُ فِيهَا بِإِذْنِ رَبِّهِم مِّن كُلِّ أَمْرٍ",
+      "numberInSurah": 4,
+      "juz": 30,
+      "page": 598,
+      "sajda": false,
+      "audio": "https://cdn.islamic.network/quran/audio/64/ar.saoodshuraym/6129.mp3",
+      "translation": "",
+      "footnotes": []
+    },
+    {
+      "text": "سَلَٰمٌ هِىَ حَتَّىٰ مَطْلَعِ ٱلْفَجْرِ",
+      "numberInSurah": 5,
+      "juz": 30,
+      "page": 598,
+      "sajda": false,
+      "audio": "https://cdn.islamic.network/quran/audio/64/ar.saoodshuraym/6130.mp3",
+      "translation": "",
+      "footnotes": []
+    }
+  ]
+}

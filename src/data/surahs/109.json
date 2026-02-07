@@ -1,0 +1,68 @@
+{
+    "number": 109,
+    "name": "al-Kafirun",
+    "verses": [
+        {
+            "text": "قُلْ يَٰٓأَيُّهَا ٱلْكَٰفِرُونَ",
+            "numberInSurah": 1,
+            "juz": 30,
+            "page": 603,
+            "sajda": false,
+            "audio": "https://cdn.islamic.network/quran/audio/64/ar.saoodshuraym/6208.mp3",
+            "translation": "[1872] Say, O disbelievers,",
+            "footnotes": [
+                {"id": 1872, "note": "Al-Kafirun: The Disbelievers. The Prophet (s.a.v) mentioned that this surah is disassociation from shirk (worship of anything other than Allah) for him who recites it. (Narrated by Aúmad, Abu Dawud and at-Tirmidhi – hasan.)"}
+            ]
+        },
+        {
+            "text": "لَآ أَعْبُدُ مَا تَعْبُدُونَ",
+            "numberInSurah": 2,
+            "juz": 30,
+            "page": 603,
+            "sajda": false,
+            "audio": "https://cdn.islamic.network/quran/audio/64/ar.saoodshuraym/6209.mp3",
+            "translation": "I do not worship what you worship.",
+            "footnotes": []
+        },
+        {
+            "text": "وَلَآ أَنتُمْ عَٰبِدُونَ مَآ أَعْبُدُ",
+            "numberInSurah": 3,
+            "juz": 30,
+            "page": 603,
+            "sajda": false,
+            "audio": "https://cdn.islamic.network/quran/audio/64/ar.saoodshuraym/6210.mp3",
+            "translation": "Nor are you worshippers of what I worship.",
+            "footnotes": []
+        },
+        {
+            "text": "وَلَآ أَنَا۠ عَابِدٌ مَّا عَبَدتُّمْ",
+            "numberInSurah": 4,
+            "juz": 30,
+            "page": 603,
+            "sajda": false,
+            "audio": "https://cdn.islamic.network/quran/audio/64/ar.saoodshuraym/6211.mp3",
+            "translation": "Nor will I be a worshipper of what you worship.",
+            "footnotes": []
+        },
+        {
+            "text": "وَلَآ أَنتُمْ عَٰبِدُونَ مَآ أَعْبُدُ",
+            "numberInSurah": 5,
+            "juz": 30,
+            "page": 603,
+            "sajda": false,
+            "audio": "https://cdn.islamic.network/quran/audio/64/ar.saoodshuraym/6212.mp3",
+            "translation": "Nor will you be worshippers of what I worship.",
+            "footnotes": []
+        },
+        {
+            "text": "لَكُمْ دِينُكُمْ وَلِىَ دِينِ",
+            "numberInSurah": 6,
+            "juz": 30,
+            "page": 603,
+            "sajda": false,
+            "audio": "https://cdn.islamic.network/quran/audio/64/ar.saoodshuraym/6213.mp3",
+            "translation": "For you is your religion, and for me is my religion.",
+            "footnotes": []
+        }
+    ]
+}

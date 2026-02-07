@@ -1,0 +1,51 @@
+{
+    "number": 112,
+    "name": "al-Ikhlas",
+    "verses": [
+        {
+            "text": "قُلْ هُوَ ٱللَّهُ أَحَدٌ",
+            "numberInSurah": 1,
+            "juz": 30,
+            "page": 604,
+            "sajda": false,
+            "audio": "https://cdn.islamic.network/quran/audio/64/ar.saoodshuraym/6222.mp3",
+            "translation": "[1878] Say, He is Allah, [who is] One, [1879]",
+            "footnotes": [
+                {"id": 1878, "note": "Al-Ikhlas: Purification, i.e., the purification of faith – the surah's theme. In narrations by al-Bukhari and Ahmad, the Prophet (s.a.v) described this surah as being equivalent to one third of the Qur'an."},
+                {"id": 1879, "note": "i.e., single, unique and indivisible."}
+            ]
+        },
+        {
+            "text": "ٱللَّهُ ٱلصَّمَدُ",
+            "numberInSurah": 2,
+            "juz": 30,
+            "page": 604,
+            "sajda": false,
+            "audio": "https://cdn.islamic.network/quran/audio/64/ar.saoodshuraym/6223.mp3",
+            "translation": "Allah, the Eternal Refuge. [1880]",
+            "footnotes": [
+                {"id":1880, "note": "i.e., the one sought in times of difficulty and need, the one depended upon by all existence."}
+            ]
+        },
+        {
+            "text": "لَمْ يَلِدْ وَلَمْ يُولَدْ",
+            "numberInSurah": 3,
+            "juz": 30,
+            "page": 604,
+            "sajda": false,
+            "audio": "https://cdn.islamic.network/quran/audio/64/ar.saoodshuraym/6224.mp3",
+            "translation": "He neither begets nor is born,",
+            "footnotes": []
+        },
+        {
+            "text": "وَمَلَمْ يَكُن لَّهُۥ كُفُوًا أَحَدٌۢ",
+            "numberInSurah": 4,
+            "juz": 30,
+            "page": 604,
+            "sajda": false,
+            "audio": "https://cdn.islamic.network/quran/audio/64/ar.saoodshuraym/6225.mp3",
+            "translation": "Nor is there to Him any equivalent.",
+            "footnotes": []
+        }
+    ]
+}

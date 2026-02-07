@@ -1,0 +1,46 @@
+{
+    "number": 106,
+    "name": "Quraysh",
+    "verses": [
+        {
+            "text": "لِإِيلَٰفِ قُرَيْشٍ",
+            "numberInSurah": 1,
+            "juz": 30,
+            "page": 602,
+            "sajda": false,
+            "audio": "https://cdn.islamic.network/quran/audio/64/ar.saoodshuraym/6194.mp3",
+            "translation": "",
+            "footnotes": []
+        },
+        {
+            "text": "إِيلَٰفِهِمْ رِحْلَةَ ٱلشِّتَآءِ وَٱلصَّيْفِ",
+            "numberInSurah": 2,
+            "juz": 30,
+            "page": 602,
+            "sajda": false,
+            "audio": "https://cdn.islamic.network/quran/audio/64/ar.saoodshuraym/6195.mp3",
+            "translation": "",
+            "footnotes": []
+        },
+        {
+            "text": "فَلْيَعْبُدُوا۟ رَبَّ هَٰذَا ٱلْبَيْتِ",
+            "numberInSurah": 3,
+            "juz": 30,
+            "page": 602,
+            "sajda": false,
+            "audio": "https://cdn.islamic.network/quran/audio/64/ar.saoodshuraym/6196.mp3",
+            "translation": "",
+            "footnotes": []
+        },
+        {
+            "text": "ٱلَّذِىٓ أَطْعَمَهُم مِّن جُوعٍ وَءَامَنَهُم مِّنْ خَوْفٍۭ",
+            "numberInSurah": 4,
+            "juz": 30,
+            "page": 602,
+            "sajda": false,
+            "audio": "https://cdn.islamic.network/quran/audio/64/ar.saoodshuraym/6197.mp3",
+            "translation": "",
+            "footnotes": []
+        }
+    ]
+}

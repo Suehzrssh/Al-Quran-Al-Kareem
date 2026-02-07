@@ -1,0 +1,40 @@
+{
+    "number": 108,
+    "name": "al-Kawthar",
+    "verses": [
+        {
+            "text": "إِنَّآ أَعْطَيْنَٰكَ ٱلْكَوْثَرَ",
+            "numberInSurah": 1,
+            "juz": 30,
+            "page": 602,
+            "sajda": false,
+            "audio": "https://cdn.islamic.network/quran/audio/64/ar.saoodshuraym/6205.mp3",
+            "translation": "[1870] Indeed, We have granted you, [O Muúammad], al-Kawthar.",
+            "footnotes": [
+                {"id": 1870, "note":"Al-Kawthar: Literally, 'the most abundant good.' Also, a river in Paradise."}
+            ]
+        },
+        {
+            "text": "فَصَلِّ لِرَبِّكَ وَٱنْحَرْ",
+            "numberInSurah": 2,
+            "juz": 30,
+            "page": 602,
+            "sajda": false,
+            "audio": "https://cdn.islamic.network/quran/audio/64/ar.saoodshuraym/6206.mp3",
+            "translation": "So pray to your Lord and sacrifice [to Him alone].",
+            "footnotes": []
+        },
+        {
+            "text": "إِنَّ شَانِئَكَ هُوَ ٱلْأَبْتَرُ",
+            "numberInSurah": 3,
+            "juz": 30,
+            "page": 602,
+            "sajda": false,
+            "audio": "https://cdn.islamic.network/quran/audio/64/ar.saoodshuraym/6207.mp3",
+            "translation": "Indeed, your enemy is the one cut off. [1871]",
+            "footnotes": [
+                {"id": 1871, "note":"From all good in this world and the Hereafter."}
+            ]
+        }
+    ]
+}

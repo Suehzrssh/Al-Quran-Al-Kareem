@@ -1,0 +1,39 @@
+{
+    "number": 110,
+    "name": "an-Nasr",
+    "verses": [
+        {
+            "text": "إِذَا جَآءَ نَصْرُ ٱللَّهِ وَٱلْفَتْحُ",
+            "numberInSurah": 1,
+            "juz": 30,
+            "page": 603,
+            "sajda": false,
+            "audio": "https://cdn.islamic.network/quran/audio/64/ar.saoodshuraym/6214.mp3",
+            "translation": "[1873] When the victory of Allah has come and the conquest, [1874]",
+            "footnotes": [
+                {"id": 1873, "note": "An-Nasr: Victory."},
+                {"id": 1874, "note": "The conquest of Makkah."}
+            ]
+        },
+        {
+            "text": "وَرَأَيْتَ ٱلنَّاسَ يَدْخُلُونَ فِى دِينِ ٱللَّهِ أَفْوَاجًا",
+            "numberInSurah": 2,
+            "juz": 30,
+            "page": 603,
+            "sajda": false,
+            "audio": "https://cdn.islamic.network/quran/audio/64/ar.saoodshuraym/6215.mp3",
+            "translation": "And you see the people entering into the religion of Allah in multitudes,",
+            "footnotes": []
+        },
+        {
+            "text": "فَسَبِّحْ بِحَمْدِ رَبِّكَ وَٱسْتَغْفِرْهُ ۚ إِنَّهُۥ كَانَ تَوَّابًۢا",
+            "numberInSurah": 3,
+            "juz": 30,
+            "page": 603,
+            "sajda": false,
+            "audio": "https://cdn.islamic.network/quran/audio/64/ar.saoodshuraym/6216.mp3",
+            "translation": "Then exalt [Him] with praise of your Lord and ask forgiveness of Him. Indeed, He is ever Accepting of repentance.",
+            "footnotes": []
+        }
+    ]
+}

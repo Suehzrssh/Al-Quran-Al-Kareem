@@ -1,0 +1,96 @@
+{
+    "number": 1,
+    "name": "al-Fatiha",
+    "verses": [
+        {
+            "text": "بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ",
+            "numberInSurah": 1,
+            "juz": 1,
+            "page": 1,
+            "sajda": false,
+            "audio": "https://cdn.islamic.network/quran/audio/64/ar.saoodshuraym/1.mp3",
+            "translation": "[1] In the name of Allah, [2] the Entirely Merciful, the Especially Merciful. [3]",
+            "footnotes": [
+                {"id": 1, "note":"Al-Fatiha: The Opening (of the Quran). Note: Surah titles are not the integral part of the Qur'an. A distinguishing word in a particular surah or a word defining its subject matter often became a common means of identification among the Prophet's companions and later scholars. Although some names, such as al-Fatiha, were used by the Prophet (pbuh) in reference to a particular surah, they were not specifically designated by him as titles."},
+                {"id": 2, "note": "Allah is a proper name belonging only to the one Almighty God, Creator and Sustainer of the heavens and the earth and all that is within them, the Eternal and Absolute, to whom alone all worship is due."},
+                {"id": 3, "note": "Ar-Rahman and ar-Raheem are two names of Allah derived from the word 'rahmah' (mercy). In Arabic grammar both are intensive forms of 'merciful' (i.e., extremely merciful). A complimentary and comprehensive meaning is intended by using both together."}
+            ]
+        },
+
+        {
+            "text": "ٱلْحَمْدُ لِلَّهِ رَبِّ ٱلْعَٰلَمِينَ",
+            "numberInSurah": 2,
+            "juz": 1,
+            "page": 1,
+            "sajda": false,
+            "audio": "https://cdn.islamic.network/quran/audio/64/ar.saoodshuraym/2.mp3",
+            "translation": "[All] praise is [due] to Allah, Lord [4] of the worlds –",
+            "footnotes": [
+                {"id": 4, "note": "When referring to Allah (subhanahu wa teala), the Arabic term 'rabb' (translated as 'Lord') includes all of the following meanings: 'owner, master, ruler, controller, sustainer, provider, guardian and caretaker.'"}
+            ]
+
+        },
+
+        {
+            "text": "ٱلرَّحْمَٰنِ ٱلرَّحِيمِ",
+            "numberInSurah": 3,
+            "juz": 1,
+            "page": 1,
+            "sajda": false,
+            "audio": "https://cdn.islamic.network/quran/audio/64/ar.saoodshuraym/3.mp3",
+            "translation": "The Entirely Merciful, the Especially Merciful,",
+            "footnotes": []
+
+        },
+
+        {
+            "text": "مَٰلِكِ يَوْمِ ٱلدِّينِ",
+            "numberInSurah": 4,
+            "juz": 1,
+            "page": 1,
+            "sajda": false,
+            "audio": "https://cdn.islamic.network/quran/audio/64/ar.saoodshuraym/4.mp3",
+            "translation": "Sovereign of the Day of Recompense. [5]",
+            "footnotes": [
+                {"id": 5, "note": "i.e., repayment and compensation for whatever was earned of good or evil during life on this earth."}
+            ]
+
+        },
+
+        {
+            "text": "إِيَّاكَ نَعْبُدُ وَإِيَّاكَ نَسْتَعِينُ",
+            "numberInSurah": 5,
+            "juz": 1,
+            "page": 1,
+            "sajda": false,
+            "audio": "https://cdn.islamic.network/quran/audio/64/ar.saoodshuraym/5.mp3",
+            "translation": "It is You we worship and You we ask for help.",
+            "footnotes": []
+
+        },
+
+        {
+            "text": "ٱهْدِنَا ٱلصِّرَٰطَ ٱلْمُسْتَقِيمَ",
+            "numberInSurah": 6,
+            "juz": 1,
+            "page": 1,
+            "sajda": false,
+            "audio": "https://cdn.islamic.network/quran/audio/64/ar.saoodshuraym/6.mp3",
+            "translation": "Guide us to the straight path –",
+            "footnotes": []
+
+        },
+
+        {
+            "text": "صِرَٰطَ ٱلَّذِينَ أَنْعَمْتَ عَلَيْهِمْ غَيْرِ ٱلْمَغْضُوبِ عَلَيْهِمْ وَلَا ٱلضَّآلِّينَ",
+            "numberInSurah": 7,
+            "juz": 1,
+            "page": 1,
+            "sajda": false,
+            "audio": "https://cdn.islamic.network/quran/audio/64/ar.saoodshuraym/7.mp3",
+            "translation": "The path of those upon whom You have bestowed favor, not of those who have evoked [Your] anger or of those who are astray.",
+            "footnotes": []
+
+        }
+    ]
+}
