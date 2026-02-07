@@ -200,6 +200,7 @@ export default function SurahDetail({ pageData, onBack }) {
                       )}
                     </div>
                   )}
+
                 </div>
               );
             })}
@@ -228,6 +229,7 @@ export default function SurahDetail({ pageData, onBack }) {
           transition: all 0.2s ease;
           flex-shrink: 0;
         }
+
         .back-btn:hover, .play-btn:hover { background: #2d3e5a; }
         .play-btn.is-playing { background: var(--primary); color: white; }
 
