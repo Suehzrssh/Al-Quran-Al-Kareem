@@ -8,7 +8,8 @@ const toArabicDigits = (num) => {
 };
 
 export default function SurahDetail({ pageData, onBack }) {
-  const { type, id } = pageData;
+  const [currentId, setCurrentId] = useState(pageData.id);
+  const [currentType, setCurrentType] = useState(pageData.type); 
   const [content, setContent] = useState([]);
   const [loading, setLoading] = useState(true);
   const [viewMode, setViewMode] = useState('both');
@@ -18,21 +19,35 @@ export default function SurahDetail({ pageData, onBack }) {
   const [isBesmelePlaying, setIsBesmelePlaying] = useState(false);
   
   const audioRef = useRef(null);
+  const preloaderRef = useRef(new Audio()); 
   const verseRefs = useRef({});
 
+  // 1. Data Loading & Aggressive Preload (Surah level)
   useEffect(() => {
     const loadContent = async () => {
       setLoading(true);
       try {
-        if (type === 'surah') {
-          const data = await import(`../data/surahs/${id}.json`);
-          setContent([{ 
-            info: surahList.find(s => s.number === id), 
-            verses: data.default.verses 
-          }]);
+        if (currentType === 'surah') {
+          const data = await import(`../data/surahs/${currentId}.json`);
+          const verses = data.default.verses;
+          setContent([{ info: surahList.find(s => s.number === currentId), verses }]);
+          verses.forEach(v => { const a = new Audio(); a.src = v.audio; a.preload = "auto"; });
+        } else if (currentType === 'mushaf') {
+          let pageResults = [];
+          for (let s = 1; s <= 114; s++) {
+            try {
+              const res = await import(`../data/surahs/${s}.json`);
+              const versesOnPage = res.default.verses.filter(v => v.page === currentId);
+              if (versesOnPage.length > 0) {
+                pageResults.push({ info: surahList.find(item => item.number === s), verses: versesOnPage });
+                versesOnPage.forEach(v => { const a = new Audio(); a.src = v.audio; a.preload = "auto"; });
+              }
+            } catch (e) { continue; }
+          }
+          setContent(pageResults);
         } else {
-          const currentJuz = juzList.juzs.find(j => j.number === id);
-          const nextJuz = juzList.juzs.find(j => j.number === id + 1);
+          const currentJuz = juzList.juzs.find(j => j.number === currentId);
+          const nextJuz = juzList.juzs.find(j => j.number === currentId + 1);
           const startPage = currentJuz.start_page;
           const endPage = nextJuz ? nextJuz.start_page - 1 : 604;
           let juzResults = [];
@@ -41,10 +56,7 @@ export default function SurahDetail({ pageData, onBack }) {
               const res = await import(`../data/surahs/${s}.json`);
               const validVerses = res.default.verses.filter(v => v.page >= startPage && v.page <= endPage);
               if (validVerses.length > 0) {
-                juzResults.push({
-                  info: surahList.find(item => item.number === s),
-                  verses: validVerses
-                });
+                juzResults.push({ info: surahList.find(item => item.number === s), verses: validVerses });
               }
             } catch (e) { console.error(e); }
           }
@@ -52,10 +64,24 @@ export default function SurahDetail({ pageData, onBack }) {
         }
       } catch (e) { console.error(e); }
       setLoading(false);
+      window.scrollTo(0,0);
     };
     loadContent();
-  }, [type, id]);
+  }, [currentType, currentId]);
 
+  // 2. Continuous Playback Bridge: Detects when a new page has loaded
+  useEffect(() => {
+    if (isPlaying && !currentAyaKey && !loading && content.length > 0) {
+      const firstSurah = content[0];
+      const firstVerse = firstSurah.verses[0];
+      // Tiny delay to ensure refs/DOM are ready
+      setTimeout(() => {
+        setCurrentAyaKey(`${firstSurah.info.number}-${firstVerse.numberInSurah}`);
+      }, 150);
+    }
+  }, [loading, content, isPlaying, currentAyaKey]);
+
+  // 3. Audio Trigger logic
   useEffect(() => {
     if (isPlaying && currentAyaKey) {
       const [sNum, vNum] = currentAyaKey.split('-').map(Number);
@@ -64,19 +90,29 @@ export default function SurahDetail({ pageData, onBack }) {
       } else {
         playActualVerse(sNum, vNum);
       }
-    } else {
+    } else if (!isPlaying) {
       audioRef.current?.pause();
     }
   }, [currentAyaKey, isPlaying]);
+
+  const preloadNextVerse = (sNum, vNum) => {
+    const sIdx = content.findIndex(s => s.info.number === sNum);
+    if (sIdx === -1) return;
+    const vIdx = content[sIdx].verses.findIndex(v => v.numberInSurah === vNum);
+    let nextVerse = null;
+    if (vIdx < content[sIdx].verses.length - 1) {
+      nextVerse = content[sIdx].verses[vIdx + 1];
+    } else if (sIdx < content.length - 1) {
+      nextVerse = content[sIdx + 1].verses[0];
+    }
+    if (nextVerse) { preloaderRef.current.src = nextVerse.audio; preloaderRef.current.load(); }
+  };
 
   const playBesmele = (sNum, vNum) => {
     setIsBesmelePlaying(true);
     audioRef.current.src = "https://cdn.islamic.network/quran/audio/64/ar.saoodshuraym/1.mp3";
     audioRef.current.play().catch(e => console.log(e));
-    audioRef.current.onended = () => {
-      setIsBesmelePlaying(false);
-      playActualVerse(sNum, vNum);
-    };
+    audioRef.current.onended = () => { setIsBesmelePlaying(false); playActualVerse(sNum, vNum); };
   };
 
   const playActualVerse = (sNum, vNum) => {
@@ -86,18 +122,28 @@ export default function SurahDetail({ pageData, onBack }) {
     if (verse && audioRef.current) {
       audioRef.current.src = verse.audio;
       audioRef.current.play().catch(e => console.log(e));
+      preloadNextVerse(sNum, vNum);
+
       if (verseRefs.current[currentAyaKey]) {
         verseRefs.current[currentAyaKey].scrollIntoView({ behavior: 'smooth', block: 'center' });
       }
+
       audioRef.current.onended = () => {
         const sIdx = content.findIndex(s => s.info.number === sNum);
         const vIdx = content[sIdx].verses.findIndex(v => v.numberInSurah === vNum);
+        
         if (vIdx < content[sIdx].verses.length - 1) {
           setCurrentAyaKey(`${sNum}-${content[sIdx].verses[vIdx+1].numberInSurah}`);
         } else if (sIdx < content.length - 1) {
           setCurrentAyaKey(`${content[sIdx+1].info.number}-${content[sIdx+1].verses[0].numberInSurah}`);
         } else {
-          setIsPlaying(false);
+          // PAGE END: Move to next ID if in Mushaf mode
+          if (currentType === 'mushaf' && currentId < 604) {
+            setCurrentAyaKey(null); // Clear key to trigger the Bridge Effect
+            setCurrentId(prev => prev + 1);
+          } else {
+            setIsPlaying(false);
+          }
         }
       };
     }
@@ -112,39 +158,38 @@ export default function SurahDetail({ pageData, onBack }) {
         const fid = parseInt(match[1]);
         const note = footnotes?.find(f => f.id === fid);
         return (
-          <sup 
-            key={index} 
-            className="footnote-marker" 
-            onClick={(e) => { 
-              e.stopPropagation(); 
-              setActiveFootnote(activeFootnote?.id === fid ? null : note); 
-            }}
-          >
-            {fid}
-          </sup>
+          <sup key={index} className="footnote-marker" onClick={(e) => { 
+            e.stopPropagation(); setActiveFootnote(activeFootnote?.id === fid ? null : note); 
+          }}>{fid}</sup>
         );
       }
       return part;
     });
   };
 
-  if (loading) return <div className="loading">...</div>;
+  if (loading && !isPlaying) return <div className="loading">...</div>;
 
   return (
-    <div className="container">
+    <div className="container" style={{ paddingBottom: currentType === 'mushaf' ? '100px' : '20px' }}>
       <header className="detail-header">
         <button className="back-btn" onClick={onBack}>←</button>
         <div className="header-center">
-          <h2 className="surah-name-title">{type === 'juz' ? `${id}. Juz` : content[0]?.info.transliteration}</h2>
+          <h2 className="surah-name-title">
+            {currentType === 'mushaf' ? `Page ${currentId}` : currentType === 'juz' ? `${currentId}. Juz` : content[0]?.info.transliteration}
+          </h2>
           <div className="mode-toggle">
-            <button className={viewMode === 'arabic' ? 'on' : ''} onClick={() => setViewMode('arabic')}>AR</button>
-            <button className={viewMode === 'both' ? 'on' : ''} onClick={() => setViewMode('both')}>BOTH</button>
-            <button className={viewMode === 'translation' ? 'on' : ''} onClick={() => setViewMode('translation')}>EN</button>
+            <button className={viewMode === 'arabic' && currentType !== 'mushaf' ? 'on' : ''} onClick={() => setViewMode('arabic')}>AR</button>
+            <button className={viewMode === 'both' && currentType !== 'mushaf' ? 'on' : ''} onClick={() => setViewMode('both')}>BOTH</button>
+            <button className={viewMode === 'translation' && currentType !== 'mushaf' ? 'on' : ''} onClick={() => setViewMode('translation')}>EN</button>
+            <button className={currentType === 'mushaf' ? 'on' : ''} onClick={() => { 
+              setCurrentType('mushaf');
+              if (content.length > 0) setCurrentId(content[0].verses[0].page);
+            }}>📖 READ</button>
           </div>
         </div>
         <div className="player-controls">
           <button onClick={() => {
-            if (!currentAyaKey) setCurrentAyaKey(`${content[0].info.number}-${content[0].verses[0].numberInSurah}`);
+            if (!currentAyaKey && content.length > 0) setCurrentAyaKey(`${content[0].info.number}-${content[0].verses[0].numberInSurah}`);
             setIsPlaying(!isPlaying);
           }} className={`play-btn ${isPlaying ? 'is-playing' : ''}`}>
             {isPlaying ? '⏸' : '▶'}
@@ -154,7 +199,7 @@ export default function SurahDetail({ pageData, onBack }) {
 
       <audio ref={audioRef} preload="auto" />
 
-      <div className="verses-list">
+      <div className={`verses-list ${currentType === 'mushaf' ? 'mushaf-layout' : ''}`}>
         {content.map((section) => (
           <div key={section.info.number} className="surah-section">
             <div className="surah-intro-area">
@@ -171,83 +216,72 @@ export default function SurahDetail({ pageData, onBack }) {
               </div>
             </div>
 
-            {section.verses.map((v) => {
-              const aKey = `${section.info.number}-${v.numberInSurah}`;
-              return (
-                <div 
-                  key={aKey} 
-                  ref={el => verseRefs.current[aKey] = el}
-                  className={`verse-card ${currentAyaKey === aKey && !isBesmelePlaying ? 'playing' : ''}`}
-                  onClick={() => { 
-                    setIsBesmelePlaying(false); 
-                    setCurrentAyaKey(aKey); 
-                    setIsPlaying(true); 
-                  }}
-                >
-                  {(viewMode === 'arabic' || viewMode === 'both') && (
-                    <p className="arabic-text arabic-font" dir="rtl">
-                      {v.text} <span className="aya-num">﴿{toArabicDigits(v.numberInSurah)}﴾</span>
-                    </p>
-                  )}
-                  {(viewMode === 'translation' || viewMode === 'both') && (
-                    <div className="translation">
-                      <span className="aya-label-num">{v.numberInSurah}.</span>
-                      {renderTranslation(v.translation, v.footnotes)}
-                      {activeFootnote && v.footnotes?.some(f => f.id === activeFootnote.id) && (
-                        <div className="accordion-note">
-                          {activeFootnote.note}
-                        </div>
-                      )}
-                    </div>
-                  )}
-
-                </div>
-              );
-            })}
+            <div className={currentType === 'mushaf' ? 'mushaf-text-flow' : ''}>
+              {section.verses.map((v) => {
+                const aKey = `${section.info.number}-${v.numberInSurah}`;
+                if (currentType === 'mushaf') {
+                  return (
+                    <span key={aKey} ref={el => verseRefs.current[aKey] = el}
+                      className={`mushaf-verse arabic-font ${currentAyaKey === aKey && !isBesmelePlaying ? 'mushaf-playing' : ''}`}
+                      onClick={() => { setIsBesmelePlaying(false); setCurrentAyaKey(aKey); setIsPlaying(true); }}>
+                      {v.text} <span className="mushaf-aya-num">﴿{toArabicDigits(v.numberInSurah)}﴾</span>
+                    </span>
+                  );
+                }
+                return (
+                  <div key={aKey} ref={el => verseRefs.current[aKey] = el}
+                    className={`verse-card ${currentAyaKey === aKey && !isBesmelePlaying ? 'playing' : ''}`}
+                    onClick={() => { setIsBesmelePlaying(false); setCurrentAyaKey(aKey); setIsPlaying(true); }}>
+                    {(viewMode === 'arabic' || viewMode === 'both') && (
+                      <p className="arabic-text arabic-font" dir="rtl">
+                        {v.text} <span className="aya-num">﴿{toArabicDigits(v.numberInSurah)}﴾</span>
+                      </p>
+                    )}
+                    {(viewMode === 'translation' || viewMode === 'both') && (
+                      <div className="translation">
+                        <span className="aya-label-num">{v.numberInSurah}.</span>
+                        {renderTranslation(v.translation, v.footnotes)}
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
           </div>
         ))}
       </div>
 
+      {currentType === 'mushaf' && (
+        <div className="mushaf-nav-footer">
+          <button disabled={currentId >= 604} onClick={() => { if (isPlaying) setCurrentAyaKey(null); setCurrentId(prev => prev + 1); }} className="nav-page-btn">← Prev</button>
+          <div className="page-indicator"><span className="page-num">{currentId}</span></div>
+          <button disabled={currentId <= 1} onClick={() => { if (isPlaying) setCurrentAyaKey(null); setCurrentId(prev => prev - 1); }} className="nav-page-btn">Next →</button>
+        </div>
+      )}
+
       <style>{`
-        .detail-header { position: sticky; top: 0; background: var(--bg); z-index: 100; display: flex; justify-content: space-between; align-items: center; padding: 15px 0; border-bottom: 1px solid #334155; margin-bottom: 20px; gap: 10px; }
+        .page-loading-toast { position: fixed; top: 80px; left: 50%; transform: translateX(-50%); background: var(--primary); color: white; padding: 5px 15px; border-radius: 20px; font-size: 0.8rem; z-index: 200; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
+        .detail-header { position: sticky; top: 0; background: var(--bg); z-index: 100; display: flex; justify-content: space-between; align-items: center; padding: 15px 0; border-bottom: 1px solid #334155; margin-bottom: 20px; }
         .header-center { text-align: center; flex: 1; }
         .surah-name-title { margin: 0; color: var(--accent); font-size: 1.2rem; font-weight: 700; }
-        
-
-        .back-btn, .play-btn { 
-          background: #1e293b; 
-          border: 1px solid var(--primary); 
-          color: var(--primary); 
-          width: 40px; 
-          height: 40px; 
-          border-radius: 50%; 
-          cursor: pointer; 
-          display: flex; 
-          align-items: center; 
-          justify-content: center; 
-          font-size: 1.2rem;
-          transition: all 0.2s ease;
-          flex-shrink: 0;
-        }
-
-        .back-btn:hover, .play-btn:hover { background: #2d3e5a; }
+        .back-btn, .play-btn { background: #1e293b; border: 1px solid var(--primary); color: var(--primary); width: 40px; height: 40px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; transition: all 0.2s ease; }
         .play-btn.is-playing { background: var(--primary); color: white; }
-
         .mode-toggle { background: var(--card); padding: 3px; border-radius: 8px; display: inline-flex; gap: 2px; margin-top: 5px; border: 1px solid #334155; }
-        .mode-toggle button { background: none; border: none; color: var(--text-muted); padding: 4px 10px; font-size: 0.7rem; border-radius: 6px; font-weight: 600; cursor: pointer; }
+        .mode-toggle button { background: none; border: none; color: var(--text-muted); padding: 4px 10px; font-size: 0.7rem; border-radius: 6px; cursor: pointer; }
         .mode-toggle button.on { background: var(--primary); color: white; }
-        
-        .footnote-marker { color: var(--primary); cursor: pointer; font-weight: bold; padding: 0 2px; font-size: 0.8rem; vertical-align: super; }
-        .accordion-note { background: #1e293b; padding: 12px; border-left: 3px solid var(--primary); margin-top: 10px; border-radius: 6px; font-size: 0.85rem; color: var(--text); }
-        
-        .surah-header-combined { display: flex; align-items: flex-end; justify-content: space-between; color: var(--accent); border-bottom: 1px solid #334155; padding-bottom: 25px; gap: 20px; }
-        .basmala-text { font-size: 2.8rem; line-height: 1; transition: 0.3s ease; }
+        .surah-header-combined { display: flex; align-items: flex-end; justify-content: space-between; color: var(--accent); border-bottom: 1px solid #334155; padding-bottom: 25px; }
+        .basmala-text { font-size: 2.8rem; line-height: 1; }
         .besmele-active { color: var(--primary); filter: drop-shadow(0 0 8px var(--primary)); }
-        
-        .verse-card { background: var(--card); padding: 25px; border-radius: 12px; margin-bottom: 15px; border: 1px solid #334155; cursor: pointer; }
+        .verse-card { background: var(--card); padding: 25px; border-radius: 12px; margin-bottom: 15px; border: 1px solid #334155; cursor: pointer; transition: all 0.3s; }
         .verse-card.playing { border-color: var(--primary); background: #243147; }
         .arabic-text { font-size: 2.3rem; line-height: 2.2; text-align: right; margin: 0; }
-        .translation { margin-top: 15px; color: var(--text-muted); line-height: 1.7; border-top: 1px solid #334155; padding-top: 15px; }
+        .mushaf-layout { background: var(--card); padding: 30px; border-radius: 16px; border: 1px solid #334155; }
+        .mushaf-text-flow { direction: rtl; text-align: justify; line-height: 2.8; }
+        .mushaf-verse { font-size: 2.3rem; cursor: pointer; padding: 0 4px; border-radius: 4px; transition: 0.2s; }
+        .mushaf-playing { background: rgba(46, 204, 113, 0.25); color: var(--primary); }
+        .mushaf-nav-footer { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: #1e293b; border: 1px solid var(--primary); padding: 10px 25px; border-radius: 50px; display: flex; align-items: center; gap: 30px; box-shadow: 0 10px 25px rgba(0,0,0,0.5); z-index: 1000; }
+        .nav-page-btn { background: none; border: none; color: var(--primary); font-weight: bold; cursor: pointer; }
+        .page-num { font-size: 1.2rem; color: white; font-weight: bold; }
       `}</style>
     </div>
   );
