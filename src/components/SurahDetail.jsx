@@ -42,7 +42,7 @@ export default function SurahDetail({ pageData, onBack }) {
                 pageResults.push({ info: surahList.find(item => item.number === s), verses: versesOnPage });
                 versesOnPage.forEach(v => { const a = new Audio(); a.src = v.audio; a.preload = "auto"; });
               }
-            } catch (e) { continue; }
+            } catch (e) { console.error(e); }
           }
           setContent(pageResults);
         } else {
