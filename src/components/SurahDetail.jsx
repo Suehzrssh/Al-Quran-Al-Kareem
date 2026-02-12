@@ -13,7 +13,7 @@ export default function SurahDetail({ pageData, onBack }) {
   const [content, setContent] = useState([]);
   const [loading, setLoading] = useState(true);
   const [viewMode, setViewMode] = useState('both');
-  const [activeFootnote, setActiveFootnote] = useState(null);
+  const [activeFootnote, setActiveFootnote] = useState(null); // format: "surahNum-verseNum-footnoteId"
   const [currentAyaKey, setCurrentAyaKey] = useState(null); 
   const [isPlaying, setIsPlaying] = useState(false);
   const [isBesmelePlaying, setIsBesmelePlaying] = useState(false);
@@ -22,7 +22,6 @@ export default function SurahDetail({ pageData, onBack }) {
   const preloaderRef = useRef(new Audio()); 
   const verseRefs = useRef({});
 
-  // 1. Data Loading & Aggressive Preload (Surah level)
   useEffect(() => {
     const loadContent = async () => {
       setLoading(true);
@@ -69,19 +68,16 @@ export default function SurahDetail({ pageData, onBack }) {
     loadContent();
   }, [currentType, currentId]);
 
-  // 2. Continuous Playback Bridge: Detects when a new page has loaded
   useEffect(() => {
     if (isPlaying && !currentAyaKey && !loading && content.length > 0) {
       const firstSurah = content[0];
       const firstVerse = firstSurah.verses[0];
-      // Tiny delay to ensure refs/DOM are ready
       setTimeout(() => {
         setCurrentAyaKey(`${firstSurah.info.number}-${firstVerse.numberInSurah}`);
       }, 150);
     }
   }, [loading, content, isPlaying, currentAyaKey]);
 
-  // 3. Audio Trigger logic
   useEffect(() => {
     if (isPlaying && currentAyaKey) {
       const [sNum, vNum] = currentAyaKey.split('-').map(Number);
@@ -137,9 +133,8 @@ export default function SurahDetail({ pageData, onBack }) {
         } else if (sIdx < content.length - 1) {
           setCurrentAyaKey(`${content[sIdx+1].info.number}-${content[sIdx+1].verses[0].numberInSurah}`);
         } else {
-          // PAGE END: Move to next ID if in Mushaf mode
           if (currentType === 'mushaf' && currentId < 604) {
-            setCurrentAyaKey(null); // Clear key to trigger the Bridge Effect
+            setCurrentAyaKey(null);
             setCurrentId(prev => prev + 1);
           } else {
             setIsPlaying(false);
@@ -149,22 +144,54 @@ export default function SurahDetail({ pageData, onBack }) {
     }
   };
 
-  const renderTranslation = (text, footnotes) => {
-    if (!text) return null;
-    const parts = text.split(/(\[\d+\])/g);
-    return parts.map((part, index) => {
-      const match = part.match(/\[(\d+)\]/);
-      if (match) {
-        const fid = parseInt(match[1]);
-        const note = footnotes?.find(f => f.id === fid);
-        return (
-          <sup key={index} className="footnote-marker" onClick={(e) => { 
-            e.stopPropagation(); setActiveFootnote(activeFootnote?.id === fid ? null : note); 
-          }}>{fid}</sup>
-        );
-      }
-      return part;
-    });
+  const renderTranslation = (verse, surahNum) => {
+    if (!verse.translation) return null;
+    const parts = verse.translation.split(/(\[\d+\])/g);
+    
+    // Check if any footnote for this specific verse is open
+    const openNoteForThisVerse = activeFootnote?.startsWith(`${surahNum}-${verse.numberInSurah}-`) 
+      ? activeFootnote.split('-').pop() 
+      : null;
+
+    return (
+      <div className="translation-wrapper">
+        <div className="translation-text">
+          <span className="aya-label-num">{verse.numberInSurah}.</span>
+          {parts.map((part, index) => {
+            const match = part.match(/\[(\d+)\]/);
+            if (match) {
+              const fid = parseInt(match[1]);
+              const uniqueKey = `${surahNum}-${verse.numberInSurah}-${fid}`;
+              return (
+                <sup 
+                  key={index} 
+                  className={`footnote-marker ${activeFootnote === uniqueKey ? 'active' : ''}`} 
+                  onClick={(e) => { 
+                    e.stopPropagation(); 
+                    setActiveFootnote(activeFootnote === uniqueKey ? null : uniqueKey); 
+                  }}
+                >
+                  {fid}
+                </sup>
+              );
+            }
+            return part;
+          })}
+        </div>
+        
+        {/* Accordion Content */}
+        {verse.footnotes?.map(note => (
+          <div 
+            key={note.id} 
+            className={`footnote-accordion ${openNoteForThisVerse === String(note.id) ? 'open' : ''}`}
+          >
+            <div className="footnote-inner">
+              <strong>Note {note.id}:</strong> {note.note}
+            </div>
+          </div>
+        ))}
+      </div>
+    );
   };
 
   if (loading && !isPlaying) return <div className="loading">...</div>;
@@ -239,8 +266,7 @@ export default function SurahDetail({ pageData, onBack }) {
                     )}
                     {(viewMode === 'translation' || viewMode === 'both') && (
                       <div className="translation">
-                        <span className="aya-label-num">{v.numberInSurah}.</span>
-                        {renderTranslation(v.translation, v.footnotes)}
+                        {renderTranslation(v, section.info.number)}
                       </div>
                     )}
                   </div>
@@ -260,6 +286,11 @@ export default function SurahDetail({ pageData, onBack }) {
       )}
 
       <style>{`
+        .footnote-marker { color: var(--primary); cursor: pointer; padding: 0 3px; font-weight: bold; transition: color 0.2s; }
+        .footnote-marker.active { color: var(--accent); text-decoration: underline; }
+        .footnote-accordion { max-height: 0; overflow: hidden; transition: max-height 0.3s ease-out, margin-top 0.3s; background: rgba(0,0,0,0.2); border-radius: 8px; margin-top: 0; }
+        .footnote-accordion.open { max-height: 500px; margin-top: 15px; border: 1px dashed var(--primary); }
+        .footnote-inner { padding: 12px; font-size: 0.9rem; color: var(--text-muted); }
         .page-loading-toast { position: fixed; top: 80px; left: 50%; transform: translateX(-50%); background: var(--primary); color: white; padding: 5px 15px; border-radius: 20px; font-size: 0.8rem; z-index: 200; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
         .detail-header { position: sticky; top: 0; background: var(--bg); z-index: 100; display: flex; justify-content: space-between; align-items: center; padding: 15px 0; border-bottom: 1px solid #334155; margin-bottom: 20px; }
         .header-center { text-align: center; flex: 1; }
