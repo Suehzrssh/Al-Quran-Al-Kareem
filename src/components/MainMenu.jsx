@@ -2,35 +2,57 @@ import React from 'react';
 import surahList from '../data/surah-list.json';
 import juzList from '../data/juz_index.json';
 
-export default function MainMenu({ onSelectSurah, activeTab }) {
-  const data = activeTab === 'surah' ? surahList : juzList.juzs;
+export default function MainMenu({ onSelectSurah, activeTab, bookmarks }) {
+  // Determine which dataset to display
+  let data = [];
+  if (activeTab === 'surah') data = surahList;
+  else if (activeTab === 'juz') data = juzList.juzs;
+  else data = bookmarks;
 
   return (
     <div className="menu-grid">
-      {data.map(item => (
-        <div 
-          key={activeTab === 'surah' ? item.number : `juz-${item.number}`} 
-          className="menu-item" 
-          onClick={() => onSelectSurah({ type: activeTab, id: item.number })}
-        >
-          <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
-            <span style={{ color: 'var(--primary)', fontWeight: 'bold', fontSize: '1.2rem' }}>
-              {item.number}
-            </span>
-            <div>
-              <div style={{ fontWeight: '600', fontSize: '1.1rem' }}>
-                {activeTab === 'surah' ? item.transliteration : `Juz ${item.number}`}
-              </div>
-              <div style={{ fontSize: '12px', color: 'var(--text-muted)' }}>
-                {activeTab === 'surah' ? `${item.versesCount} Ayahs` : `Page ${item.start_page}`}
-              </div>
-            </div>
-          </div>
-          <span className="arabic-font" style={{ fontSize: '2.2rem', color: 'var(--accent)' }}>
-            {activeTab === 'surah' ? item.nameArabic : item.name}
-          </span>
+      {data.length === 0 && activeTab === 'bookmarks' ? (
+        <div className="empty-state">
+          <p>No bookmarks saved yet.</p>
+          <small>Click the bookmark icon while reading to save a page or surah.</small>
         </div>
-      ))}
+      ) : (
+        data.map((item, index) => {
+          const isBookmark = activeTab === 'bookmarks';
+          const itemId = isBookmark ? item.id : item.number;
+          const itemType = isBookmark ? item.type : activeTab;
+
+          return (
+            <div 
+              key={isBookmark ? `bm-${item.type}-${item.id}-${index}` : `${activeTab}-${item.number}`} 
+              className="menu-item" 
+              onClick={() => onSelectSurah({ type: itemType, id: itemId })}
+            >
+              <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
+                <span className="item-number">
+                  {isBookmark ? "🔖" : item.number}
+                </span>
+                <div>
+                  <div className="item-title">
+                    {isBookmark ? item.label : (activeTab === 'surah' ? item.transliteration : `Juz ${item.number}`)}
+                  </div>
+                  <div className="item-subtitle">
+                    {activeTab === 'surah' ? `${item.versesCount} Ayahs` : 
+                     activeTab === 'juz' ? `Page ${item.start_page}` : 
+                     `Saved ${itemType.toUpperCase()}`}
+                  </div>
+                </div>
+              </div>
+              
+              {!isBookmark && (
+                <span className="arabic-font item-arabic">
+                  {activeTab === 'surah' ? item.nameArabic : item.name}
+                </span>
+              )}
+            </div>
+          );
+        })
+      )}
 
       <style>{`
         .menu-grid {
@@ -53,6 +75,33 @@ export default function MainMenu({ onSelectSurah, activeTab }) {
           border-color: var(--primary);
           transform: translateY(-2px);
           background: #273549;
+        }
+        .item-number {
+          color: var(--primary);
+          font-weight: bold;
+          font-size: 1.2rem;
+          min-width: 30px;
+        }
+        .item-title {
+          font-weight: 600;
+          font-size: 1.1rem;
+        }
+        .item-subtitle {
+          font-size: 12px;
+          color: var(--text-muted);
+        }
+        .item-arabic {
+          font-size: 2.2rem;
+          color: var(--accent);
+        }
+        .empty-state {
+          grid-column: 1 / -1;
+          text-align: center;
+          padding: 50px;
+          background: var(--card);
+          border-radius: 12px;
+          border: 1px dashed #334155;
+          color: var(--text-muted);
         }
       `}</style>
     </div>

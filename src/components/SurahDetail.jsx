@@ -7,13 +7,13 @@ const toArabicDigits = (num) => {
   return num.toString().replace(/\d/g, (d) => id[d]);
 };
 
-export default function SurahDetail({ pageData, onBack }) {
+export default function SurahDetail({ pageData, onBack, bookmarks, onToggleBookmark }) {
   const [currentId, setCurrentId] = useState(pageData.id);
   const [currentType, setCurrentType] = useState(pageData.type); 
   const [content, setContent] = useState([]);
   const [loading, setLoading] = useState(true);
   const [viewMode, setViewMode] = useState('both');
-  const [activeFootnote, setActiveFootnote] = useState(null); // format: "surahNum-verseNum-footnoteId"
+  const [activeFootnote, setActiveFootnote] = useState(null); 
   const [currentAyaKey, setCurrentAyaKey] = useState(null); 
   const [isPlaying, setIsPlaying] = useState(false);
   const [isBesmelePlaying, setIsBesmelePlaying] = useState(false);
@@ -21,6 +21,28 @@ export default function SurahDetail({ pageData, onBack }) {
   const audioRef = useRef(null);
   const preloaderRef = useRef(new Audio()); 
   const verseRefs = useRef({});
+
+  // Bookmark Logic
+  const isBookmarked = bookmarks.some(b => b.type === currentType && b.id === currentId);
+
+  const handleBookmarkToggle = () => {
+    let label = "";
+    if (currentType === 'mushaf') {
+      // Find the juz for the first verse on this page
+      const firstVerseJuz = content[0]?.verses[0]?.juz || "";
+      label = `Page ${currentId}, Juz ${firstVerseJuz}`;
+    } else if (currentType === 'surah') {
+      label = content[0]?.info.transliteration;
+    } else {
+      label = `Juz ${currentId}`;
+    }
+
+    onToggleBookmark({
+      type: currentType,
+      id: currentId,
+      label: label
+    });
+  };
 
   useEffect(() => {
     const loadContent = async () => {
@@ -114,16 +136,13 @@ export default function SurahDetail({ pageData, onBack }) {
   const playActualVerse = (sNum, vNum) => {
     const currentSurah = content.find(s => s.info.number === sNum);
     const verse = currentSurah?.verses.find(v => v.numberInSurah === vNum);
-
     if (verse && audioRef.current) {
       audioRef.current.src = verse.audio;
       audioRef.current.play().catch(e => console.log(e));
       preloadNextVerse(sNum, vNum);
-
       if (verseRefs.current[currentAyaKey]) {
         verseRefs.current[currentAyaKey].scrollIntoView({ behavior: 'smooth', block: 'center' });
       }
-
       audioRef.current.onended = () => {
         const sIdx = content.findIndex(s => s.info.number === sNum);
         const vIdx = content[sIdx].verses.findIndex(v => v.numberInSurah === vNum);
@@ -147,12 +166,9 @@ export default function SurahDetail({ pageData, onBack }) {
   const renderTranslation = (verse, surahNum) => {
     if (!verse.translation) return null;
     const parts = verse.translation.split(/(\[\d+\])/g);
-    
-    // Check if any footnote for this specific verse is open
     const openNoteForThisVerse = activeFootnote?.startsWith(`${surahNum}-${verse.numberInSurah}-`) 
       ? activeFootnote.split('-').pop() 
       : null;
-
     return (
       <div className="translation-wrapper">
         <div className="translation-text">
@@ -178,8 +194,6 @@ export default function SurahDetail({ pageData, onBack }) {
             return part;
           })}
         </div>
-        
-        {/* Accordion Content */}
         {verse.footnotes?.map(note => (
           <div 
             key={note.id} 
@@ -214,7 +228,12 @@ export default function SurahDetail({ pageData, onBack }) {
             }}>📖 READ</button>
           </div>
         </div>
-        <div className="player-controls">
+        <div className="player-controls" style={{ display: 'flex', gap: '10px' }}>
+          <button onClick={handleBookmarkToggle} className={`play-btn ${isBookmarked ? 'is-playing' : ''}`}>
+             <svg width="20" height="20" viewBox="0 0 24 24" fill={isBookmarked ? "white" : "none"} stroke="currentColor" strokeWidth="2">
+              <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
+            </svg>
+          </button>
           <button onClick={() => {
             if (!currentAyaKey && content.length > 0) setCurrentAyaKey(`${content[0].info.number}-${content[0].verses[0].numberInSurah}`);
             setIsPlaying(!isPlaying);
@@ -225,7 +244,7 @@ export default function SurahDetail({ pageData, onBack }) {
       </header>
 
       <audio ref={audioRef} preload="auto" />
-
+      
       <div className={`verses-list ${currentType === 'mushaf' ? 'mushaf-layout' : ''}`}>
         {content.map((section) => (
           <div key={section.info.number} className="surah-section">
@@ -242,7 +261,6 @@ export default function SurahDetail({ pageData, onBack }) {
                 <span className="surah-name-side surah-arabic arabic-font">{section.info.nameArabic}</span>
               </div>
             </div>
-
             <div className={currentType === 'mushaf' ? 'mushaf-text-flow' : ''}>
               {section.verses.map((v) => {
                 const aKey = `${section.info.number}-${v.numberInSurah}`;
@@ -276,7 +294,7 @@ export default function SurahDetail({ pageData, onBack }) {
           </div>
         ))}
       </div>
-
+      
       {currentType === 'mushaf' && (
         <div className="mushaf-nav-footer">
           <button disabled={currentId >= 604} onClick={() => { if (isPlaying) setCurrentAyaKey(null); setCurrentId(prev => prev + 1); }} className="nav-page-btn">← Prev</button>
@@ -291,7 +309,6 @@ export default function SurahDetail({ pageData, onBack }) {
         .footnote-accordion { max-height: 0; overflow: hidden; transition: max-height 0.3s ease-out, margin-top 0.3s; background: rgba(0,0,0,0.2); border-radius: 8px; margin-top: 0; }
         .footnote-accordion.open { max-height: 500px; margin-top: 15px; border: 1px dashed var(--primary); }
         .footnote-inner { padding: 12px; font-size: 0.9rem; color: var(--text-muted); }
-        .page-loading-toast { position: fixed; top: 80px; left: 50%; transform: translateX(-50%); background: var(--primary); color: white; padding: 5px 15px; border-radius: 20px; font-size: 0.8rem; z-index: 200; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
         .detail-header { position: sticky; top: 0; background: var(--bg); z-index: 100; display: flex; justify-content: space-between; align-items: center; padding: 15px 0; border-bottom: 1px solid #334155; margin-bottom: 20px; }
         .header-center { text-align: center; flex: 1; }
         .surah-name-title { margin: 0; color: var(--accent); font-size: 1.2rem; font-weight: 700; }

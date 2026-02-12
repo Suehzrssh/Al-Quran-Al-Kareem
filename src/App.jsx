@@ -1,10 +1,21 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import MainMenu from './components/MainMenu';
 import SurahDetail from './components/SurahDetail';
 
 export default function App() {
   const [page, setPage] = useState({ type: 'menu', id: null, viewType: 'surah' });
   const [activeTab, setActiveTab] = useState('surah');
+  
+  // Load bookmarks from local storage on init
+  const [bookmarks, setBookmarks] = useState(() => {
+    const saved = localStorage.getItem('quran_bookmarks');
+    return saved ? JSON.parse(saved) : [];
+  });
+
+  // Save bookmarks whenever they change
+  useEffect(() => {
+    localStorage.setItem('quran_bookmarks', JSON.stringify(bookmarks));
+  }, [bookmarks]);
 
   const handleSelect = (selection) => {
     setPage({ 
@@ -14,11 +25,20 @@ export default function App() {
     });
   };
 
-  // This function handles opening the "Exact Page" (Mushaf) view
+  const toggleBookmark = (item) => {
+    setBookmarks(prev => {
+      const exists = prev.find(b => b.type === item.type && b.id === item.id);
+      if (exists) {
+        return prev.filter(b => !(b.type === item.type && b.id === item.id));
+      }
+      return [item, ...prev]; // Add new bookmarks to the top
+    });
+  };
+
   const openMushaf = () => {
     setPage({
       type: 'detail',
-      id: 1, // Start at page 1
+      id: 1,
       viewType: 'mushaf'
     });
   };
@@ -27,7 +47,6 @@ export default function App() {
     <div className="app-container">
       {page.type === 'menu' ? (
         <div className="container">
-          {/* Header with Title and Book Icon */}
           <div className="header-main">
             <h1 className="main-title">Holy Qur'an</h1>
             <button 
@@ -52,20 +71,28 @@ export default function App() {
             >
               Juz
             </button>
+            <button 
+              className={activeTab === 'bookmarks' ? 'active' : ''} 
+              onClick={() => setActiveTab('bookmarks')}
+            >
+              Bookmarks
+            </button>
           </div>
 
           <MainMenu 
             activeTab={activeTab} 
             onSelectSurah={handleSelect} 
+            bookmarks={bookmarks}
           />
         </div>
       ) : (
         <SurahDetail 
           pageData={{ type: page.viewType, id: page.id }} 
           onBack={() => setPage({ type: 'menu', id: null })} 
+          bookmarks={bookmarks}
+          onToggleBookmark={toggleBookmark}
         />
       )}
-
       <style>{`
         .header-main {
           display: flex;
@@ -100,7 +127,7 @@ export default function App() {
           justify-content: center;
           gap: 0;
           margin: 20px auto 30px;
-          max-width: 400px;
+          max-width: 500px;
           background: var(--card);
           border-radius: 12px;
           padding: 5px;
